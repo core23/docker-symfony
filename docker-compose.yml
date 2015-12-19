@@ -3,6 +3,7 @@ symfony:
     volumes:
         - ./code:/var/www
         - ./var/logs/symfony:/var/www/app/logs
+    mem_limit: 512m
     tty: true
 
 db:
@@ -36,7 +37,7 @@ nginx:
     volumes_from:
         - symfony
     volumes:
-            - ./var/logs/nginx/:/var/log/nginx
+        - ./var/logs/nginx/:/var/log/nginx
     environment:
         <APP_SERVER_NAME>: symfony.dev
 
