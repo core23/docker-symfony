@@ -6,7 +6,7 @@ services:
         ports:
             - 3306:3306
         volumes:
-            - ./data/db:/var/lib/mysql
+            - ${DB_DATA}:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -15,6 +15,8 @@ services:
 
     php:
         build: php7-fpm
+        volumes:
+            - ${CODE_DATA}:/var/www/symfony
         ports:
             - 9000:9000
         links:
@@ -24,10 +26,7 @@ services:
         build: node
         volumes:
             - ./node/gulp:/project
-            - /project/build
-            - /project/.sass-cache
-            - ./data/node/bower:/project/build/bower
-            - ./data/node/modules:/project/node_modules
+            - ${NODE_DATA}:/src
 
     nginx:
         build: nginx
