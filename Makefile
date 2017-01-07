@@ -10,16 +10,16 @@ help:
 assets: clean-assets install-assets
 
 clean-assets:
-	rm -rf ./code/web/assets/*
-	rm -rf ./code/web/bundles/*
+	rm -rf ./data/code/web/assets/*
+	rm -rf ./data/code/web/bundles/*
 
 install-assets:
 	docker-compose run --rm symfony app/console --env=prod assets:install
 	docker-compose run --rm symfony app/console --env=prod assetic:dump
 
 clean:
-	rm -rf ./code/app/cache/*
-	rm -rf ./code/app/logs/*
+	rm -rf ./data/code/app/cache/*
+	rm -rf ./data/code/app/logs/*
 	docker-compose run --rm symfony app/console cache:warmup --env=prod --no-debug
 	docker-compose run --rm symfony app/console cache:warmup --env=dev
 
@@ -35,4 +35,4 @@ start:
 	docker-compose up -d
 
 stop:
-	docker-compoes stop
+	docker-compose stop

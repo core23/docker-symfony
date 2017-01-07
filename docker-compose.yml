@@ -1,45 +1,47 @@
-code:
-    build: code/
-    volumes:
-        - ./code:/var/www
-        - ./var/logs/symfony:/var/www/var/logs
+version: '2'
 
-db:
-    image: mysql:5.5
-    ports:
-        - 3306:3306
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: symfony
-        MYSQL_USER: symfony
-        MYSQL_PASSWORD: symfony
+services:
+    db:
+        image: mysql
+        ports:
+            - 3306:3306
+        volumes:
+            - ./data/db:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-php:
-    build: php-fpm/
-    expose:
-        - 9000
-    links:
-        - db
-    volumes_from:
-        - code
-    environment:
-        APP_SERVER_NAME: symfony.dev
+    php:
+        build: php7-fpm
+        ports:
+            - 9000:9000
+        links:
+            - db:mysqldb
 
-nginx:
-    build: nginx/
-    ports:
-        - 8080:80
-    links:
-        - php
-    volumes_from:
-        - code
-    volumes:
-        - ./var/logs/nginx/:/var/log/nginx
-    environment:
-        <APP_SERVER_NAME>: symfony.dev
+    node:
+        build: node
+        volumes:
+            - ./node/gulp:/project
+            - /project/build
+            - /project/.sass-cache
+            - ./data/node/bower:/project/build/bower
+            - ./data/node/modules:/project/node_modules
 
-npm:
-    build: npm/
-    volumes_from:
-        - code
-    tty: true
+    nginx:
+        build: nginx
+        ports:
+            - 80:80
+        links:
+            - php
+        volumes_from:
+            - php
+            
+    elk:
+        build: elk
+        ports:
+            - 81:5601
+        volumes_from:
+            - php
+            - nginx

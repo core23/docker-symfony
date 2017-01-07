@@ -1,2 +1,2 @@
-code/
-var/logs
+data/
+.env
