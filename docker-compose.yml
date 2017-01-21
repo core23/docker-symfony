@@ -15,10 +15,10 @@ services:
 
     php:
         build: php7-fpm
-        volumes:
-            - ${CODE_DATA}:/var/www/symfony
         ports:
             - 9000:9000
+        volumes:
+            - ${CODE_DATA}:/var/www/symfony
         links:
             - db:mysqldb
 
@@ -26,6 +26,7 @@ services:
         build: nginx
         ports:
             - 80:80
+            - 443:443
         links:
             - php
         volumes_from:

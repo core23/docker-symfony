@@ -12,6 +12,11 @@ RUN apt-get install -y \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
+# SOAP extension
+RUN apt-get install -y \
+        libxml2-dev \
+    && docker-php-ext-install soap
+
 # GD extension
 RUN apt-get install -y \
         libfreetype6-dev \
