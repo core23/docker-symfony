@@ -22,12 +22,6 @@ services:
         links:
             - db:mysqldb
 
-    node:
-        build: node
-        volumes:
-            - ./node/gulp:/project
-            - ${NODE_DATA}:/src
-
     nginx:
         build: nginx
         ports:
