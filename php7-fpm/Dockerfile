@@ -32,11 +32,11 @@ RUN apt-get install -y \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
+# Memory Limit
+RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
+
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar; \
-    echo 'COMPOSER=$(which composer.phar)' >> /usr/bin/composer; \
-    echo 'php -d memory_limit=-1 $COMPOSER $@' >> /usr/bin/composer; \
-    chmod +x /usr/bin/composer;
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer;
 
 # Set timezone
 RUN rm /etc/localtime \
@@ -61,3 +61,5 @@ WORKDIR /var/www/symfony
 
 RUN mkdir -p /var/www/symfony/var && chown -Rv www-data:www-data /var/www/symfony/var \
     && mkdir -p /var/www/symfony/web/uploads && chown -Rv www-data:www-data /var/www/symfony/web/uploads
+
+CMD ["php-fpm", "-F"]
