@@ -12,6 +12,11 @@ RUN apt-get install -y \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
+# Mcrypt extension
+RUN apt-get install -y \
+        libmcrypt-dev \
+    && docker-php-ext-install mcrypt
+
 # SOAP extension
 RUN apt-get install -y \
         libxml2-dev \
