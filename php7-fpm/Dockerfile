@@ -61,6 +61,6 @@ RUN pecl install xdebug \
 WORKDIR /var/www/symfony
 
 RUN mkdir -p /var/www/symfony/var && chown -Rv www-data:www-data /var/www/symfony/var \
-    && mkdir -p /var/www/symfony/web/uploads && chown -Rv www-data:www-data /var/www/symfony/web/uploads
+    && mkdir -p /var/www/symfony/public/uploads && chown -Rv www-data:www-data /var/www/symfony/public/uploads
 
 CMD ["php-fpm", "-F"]
