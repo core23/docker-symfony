@@ -21,6 +21,8 @@ services:
             - ${CODE_DATA}:/var/www/symfony
         links:
             - db:mysqldb
+        environment:
+            SERVER_HOST: ${SERVER_HOST}
 
     nginx:
         build: nginx
