@@ -13,6 +13,11 @@ RUN apt-get install -y \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
+# string extensions
+RUN docker-php-ext-install \
+	gettext \
+	mbstring
+
 # SOAP extension
 RUN apt-get install -y \
         libxml2-dev \
