@@ -93,4 +93,6 @@ WORKDIR /var/www/symfony
 RUN mkdir -p /var/www/symfony/var && chown -Rv www-data:www-data /var/www/symfony/var \
     && mkdir -p /var/www/symfony/public/uploads && chown -Rv www-data:www-data /var/www/symfony/public/uploads
 
+RUN usermod -u 1000 www-data
+    
 CMD ["php-fpm", "-F"]
