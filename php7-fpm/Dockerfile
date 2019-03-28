@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.3-fpm
 
 MAINTAINER Christian Gripp <mail@core23.de>
 
@@ -45,7 +45,8 @@ RUN apt-get install -y \
     && docker-php-ext-install gd
 
 # ZIP
-RUN docker-php-ext-install zip
+RUN apt-get install -y libzip-dev \
+    && docker-php-ext-install zip
 
 # Bcmath
 RUN docker-php-ext-install bcmath
