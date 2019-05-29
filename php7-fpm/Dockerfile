@@ -64,6 +64,18 @@ RUN apt-get install -y \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
+# Redis extension
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
+
+# Mongo extension
+RUN apt-get install -y \
+            libssl-dev \
+    && pecl install -o -f mongodb \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable mongodb
+
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
 
