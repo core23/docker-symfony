@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 MAINTAINER Christian Gripp <mail@core23.de>
 
@@ -9,16 +9,10 @@ RUN apt-get update && apt-get install -y \
         gnupg \
         apt-transport-https
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get install -y nodejs npm
-
-# yarn
-RUN apt-get install -y yarn \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y \
-        yarn
+# NPM tools
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - \
+    && apt-get install -y nodejs yarn \
+    && npm install npm --global
 
 # Intl extension
 RUN apt-get install -y \
@@ -27,9 +21,10 @@ RUN apt-get install -y \
     && docker-php-ext-install intl
 
 # string extensions
-RUN docker-php-ext-install \
-	gettext \
-	mbstring
+RUN apt-get install libonig-dev \
+    && docker-php-ext-install \
+        gettext \
+        mbstring
 
 # SOAP extension
 RUN apt-get install -y \
@@ -101,11 +96,13 @@ RUN pecl install xdebug \
     && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+EXPOSE 9001
+
 WORKDIR /var/www/symfony
 
 RUN mkdir -p /var/www/symfony/var && chown -Rv www-data:www-data /var/www/symfony/var \
     && mkdir -p /var/www/symfony/public/uploads && chown -Rv www-data:www-data /var/www/symfony/public/uploads
 
 RUN usermod -u 1000 www-data
-    
+
 CMD ["php-fpm", "-F"]
