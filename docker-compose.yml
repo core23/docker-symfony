@@ -15,6 +15,7 @@ services:
 
     php:
         build: php7-fpm
+        image: core23/symfony-php:${TAG:-latest}
         ports:
             - 9000:9000
         volumes:
@@ -26,6 +27,7 @@ services:
 
     nginx:
         build: nginx
+        image: core23/symfony-nginx:${TAG-latest}
         ports:
             - 80:80
             - 443:443
@@ -36,6 +38,7 @@ services:
             
     elk:
         build: elk
+        image: core23/symfony-elk:${TAG-latest}
         ports:
             - 81:5601
         volumes_from:
