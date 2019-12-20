@@ -1,0 +1,29 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  pull_request:
+    push:
+      - "**"
+    tags:
+      - "**"
+
+name: "Continuous Integration"
+
+jobs:
+  test:
+    name: "Docker Compose"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build the stack
+        run: docker-compose up -d
+
+      - name: Test
+        run: |
+          cp .env.dist .env
+          docker-compose version
+          docker-compose up -d --force-recreate
+          echo $?
