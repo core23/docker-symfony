@@ -1,43 +1,44 @@
-version: '2'
+version: '3.4'
 
 services:
-    db:
-        image: mysql
-        ports:
-            - 3306:3306
+    php:
+        build: php7-fpm
+        image: "core23/symfony-php:${TAG:-latest}"
         volumes:
-            - ${DB_DATA}:/var/lib/mysql
+            - ./test-data:/var/www/symfony
+        links:
+            - mysql:mysqldb
+
+    nginx:
+        build: nginx
+        image: "core23/symfony-nginx:${TAG:-latest}"
+        links:
+            - php
+        ports:
+            - 0:80
+        volumes:
+            - ./test-data:/var/www/symfony
+            - nginx-log:/var/log/nginx
+        environment:
+            NGINX_HOST: ${NGINX_HOST}
+
+    mysql:
+        image: mysql:5
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-    php:
-        build: php7-fpm
-        ports:
-            - 9000:9000
-        volumes:
-            - ${CODE_DATA}:/var/www/symfony
-        links:
-            - db:mysqldb
-        environment:
-            SERVER_HOST: ${SERVER_HOST}
-
-    nginx:
-        build: nginx
-        ports:
-            - 80:80
-            - 443:443
-        links:
-            - php
-        volumes_from:
-            - php
-            
     elk:
         build: elk
-        ports:
-            - 81:5601
-        volumes_from:
-            - php
+        image: "core23/symfony-elk:${TAG:-latest}"
+        depends_on:
             - nginx
+            - php
+        volumes:
+            - ./test-data:/var/www/symfony
+            - nginx-log:/var/log/nginx:ro
+
+volumes:
+    nginx-log:
