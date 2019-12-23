@@ -26,4 +26,4 @@ jobs:
           cp .env.dist .env
           docker-compose version
           docker-compose up -d --force-recreate
-          echo $?
+          curl http://localhost:$(docker-compose port nginx 80 | cut -d ":" -f 2)
