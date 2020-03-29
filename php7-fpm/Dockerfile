@@ -71,6 +71,11 @@ RUN apt-get install -y \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable mongodb
 
+# XSL
+RUN apt-get install -y \
+        libxslt-dev \
+   && docker-php-ext-install xsl
+
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
 
