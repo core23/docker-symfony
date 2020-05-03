@@ -74,7 +74,8 @@ RUN apt-get install -y \
 # XSL
 RUN apt-get install -y \
         libxslt-dev \
-   && docker-php-ext-install xsl
+   && docker-php-ext-install xsl \
+   && docker-php-ext-enable xsl
 
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
